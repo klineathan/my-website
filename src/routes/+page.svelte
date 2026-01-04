@@ -62,7 +62,7 @@
 		<h2><a href="/timeline">What have I been up to?</a></h2>
 		<p>See <a href="/timeline">my timeline</a> to get personal with Jon</p>
 
-		<h2>Artifacts of making and experimenting</h2>
+		<!-- <h2>Artifacts of making and experimenting</h2>
 		<ul>
 			<li><a href="#">Dumpling, the JDM camper van</a></li>
 			<li><a href="#">Experiences of daily driving a Linux smartphone</a></li>
@@ -79,7 +79,7 @@
 			<li><a href="#">A list of my favorite things in life</a></li>
 			<li><a href="#">People, organizations, and places that inspire me</a></li>
 			<li><a href="#">Gift ideas for mom</a></li>
-		</ul>
+		</ul> -->
 	</section>
 </main>
 
