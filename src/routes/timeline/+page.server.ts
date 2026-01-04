@@ -1,4 +1,4 @@
-import { CRM_URL, CRM_KEY } from '$env/dynamic/private';
+import { env } from '$env/dynamic/private';
 
 interface MediaItem {
 	id: string;
@@ -31,9 +31,9 @@ interface PostsResponse {
 }
 
 export async function load({ fetch }) {
-	const response = await fetch(`${CRM_URL}/api/v1/posts`, {
+	const response = await fetch(`${env.CRM_URL}/api/v1/posts`, {
 		headers: {
-			Authorization: `Bearer ${CRM_KEY}`,
+			Authorization: `Bearer ${env.CRM_KEY}`,
 			'Content-Type': 'application/json'
 		}
 	});
