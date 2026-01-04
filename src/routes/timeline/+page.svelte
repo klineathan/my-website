@@ -49,8 +49,8 @@
 			{#each data.posts as post, i}
 				<article class="post" style="animation-delay: {i * 80}ms">
 					<div class="post-timestamp">
-						<span class="date">{formatDate(post.publishedAt)}</span>
-						<span class="time">{formatTime(post.publishedAt)}</span>
+						<span class="date">{formatDate(post.createdAt)}</span>
+						<span class="time">{formatTime(post.createdAt)}</span>
 					</div>
 					
 					<div class="post-content">
