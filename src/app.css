@@ -55,9 +55,8 @@ h1 {
     margin-bottom: 0.75rem;
 }
 
-.intro {
+.intro-dialogue {
     font-size: 1.1rem;
-    margin-bottom: 3rem;
 }
 
 section {
@@ -110,6 +109,7 @@ li {
   width: 160px;
   height: 211px;
   flex-shrink: 0;
+  margin-bottom: 2rem;
 }
 
 .avatar-container .avatar {
@@ -130,7 +130,7 @@ li {
 .thought-bubble {
   position: absolute;
   top: -20px;
-  right: 140px;
+  left: 180px;
   background: #EDEAE0;
   color: #2a3a2a;
   padding: 0.6rem 0.9rem;
@@ -149,7 +149,7 @@ li {
   content: '';
   position: absolute;
   bottom: -8px;
-  right: -12px;
+  left: -12px;
   width: 12px;
   height: 12px;
   background: #EDEAE0;
@@ -161,7 +161,7 @@ li {
   content: '';
   position: absolute;
   bottom: -18px;
-  right: -22px;
+  left: -22px;
   width: 8px;
   height: 8px;
   background: #EDEAE0;
@@ -184,3 +184,41 @@ li {
   }
 }
 
+.carousel-nav {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-arrow {
+  background: transparent;
+  border: 1px solid var(--text);
+  color: var(--text);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.nav-arrow:hover {
+  background: rgba(237, 234, 224, 0.15);
+  transform: scale(1.1);
+}
+
+.nav-arrow:active {
+  transform: scale(0.95);
+}
+
+.flavor-text {
+  margin-top: 12px;
+  color: #CBC2A4;
+  font-style: italic;
+}

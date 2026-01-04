@@ -1,25 +1,19 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
-
 	const images = [
-		{ src: '/pic_1.JPEG', thought: 'Wow, who knew there were medieval castle ruins in Missouri?' },
-		{ src: '/pic_2.JPEG', thought: "How the f*ck did I let you convince me to do this, Peter?" },
-		{ src: '/pic_3.JPEG', thought: 'Flow state' },
-		{ src: '/pic_4.PNG', thought: "I'll have what I'm having" }
+		{ src: '/pic_1.JPEG', thought: 'Who knew there were medieval castle ruins in Missouri?' },
+		{ src: '/pic_2.JPEG', thought: "How did Peter convince me to do this?" },
+		{ src: '/pic_3.PNG', thought: "I'll have what I'm having" }
 	];
 
 	let currentIndex = $state(0);
-	let intervalId: ReturnType<typeof setInterval>;
 
-	onMount(() => {
-		intervalId = setInterval(() => {
-			currentIndex = (currentIndex + 1) % images.length;
-		}, 4000);
-	});
+	function prev() {
+		currentIndex = (currentIndex - 1 + images.length) % images.length;
+	}
 
-	onDestroy(() => {
-		if (intervalId) clearInterval(intervalId);
-	});
+	function next() {
+		currentIndex = (currentIndex + 1) % images.length;
+	}
 </script>
 
 <main>
@@ -28,10 +22,12 @@
 			<h1>Welcome, traveler!</h1>
 			<p class="intro-dialogue">
 				It seems our wavepackets have collided and somehow you've made it into my... library? Well,
-				the name's Jonathan, but everyone calls me Jon. Have a look around and let me know if you
+				my name's Jonathan, but everyone calls me Jon. Have a look around and let me know if you
 				need anything.
 			</p>
-			<span>-> </span><a href="mailto:jon.kline@hey.com">jon.kline@hey.com</a>
+			<span>-> <a href="mailto:jon.kline@hey.com">jon.kline@hey.com</a></span>
+      <!--<p>What's your favorite food?</p>-->
+      <p class="flavor-text">Come back when you've found that soundrel, Brodigan!</p>
 		</div>
 		<div class="avatar-container">
 			{#key currentIndex}
@@ -47,6 +43,18 @@
 					class:active={i === currentIndex}
 				/>
 			{/each}
+			<div class="carousel-nav">
+				<button class="nav-arrow" onclick={prev} aria-label="Previous image">
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+						<polyline points="15 18 9 12 15 6"></polyline>
+					</svg>
+				</button>
+				<button class="nav-arrow" onclick={next} aria-label="Next image">
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+						<polyline points="9 18 15 12 9 6"></polyline>
+					</svg>
+				</button>
+			</div>
 		</div>
 	</section>
 
@@ -63,7 +71,7 @@
 
 		<h2>Articles</h2>
 		<ul>
-			<li><a href="#">2026: The year of the Linux smartphone</a></li>
+			<li><a href="#">Rejecting hyper-convenience: The start of a character-driven path through consumer technology</a></li>
 		</ul>
 
 		<h2>Other fun stuff</h2>
