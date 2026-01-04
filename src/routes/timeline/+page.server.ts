@@ -1,4 +1,4 @@
-import { CRM_URL, CRM_KEY } from '$env/static/private';
+import { CRM_URL, CRM_KEY } from '$env/dynamic/private';
 
 interface MediaItem {
 	id: string;
