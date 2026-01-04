@@ -59,8 +59,8 @@
 	</section>
 
 	<section>
-		<h2><a href="#">What have I been up to?</a></h2>
-		<p>See <a href="#">my timeline</a> to get personal with Jon</p>
+		<h2><a href="/timeline">What have I been up to?</a></h2>
+		<p>See <a href="/timeline">my timeline</a> to get personal with Jon</p>
 
 		<h2>Artifacts of making and experimenting</h2>
 		<ul>
