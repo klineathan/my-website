@@ -1,0 +1,7 @@
+[build]
+  command = "bun run build"
+  publish = ".svelte-kit/netlify"
+
+[build.environment]
+  NODE_VERSION = "20"
+
