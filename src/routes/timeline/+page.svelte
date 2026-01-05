@@ -30,10 +30,10 @@
 			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 				<polyline points="15 18 9 12 15 6"></polyline>
 			</svg>
-			Back to the tavern
+			Back to the library
 		</a>
-		<h1>The Chronicle</h1>
-		<p class="subtitle">Dispatches from Jon's corner of the multiverse</p>
+		<h1>The Timeline</h1>
+		<p class="subtitle">Dispatches from Kline household #5</p>
 	</header>
 
 	{#if data.error}
