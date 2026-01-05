@@ -27,7 +27,7 @@
 			</p>
 			<span>-> <a href="mailto:jon.kline@hey.com">jon.kline@hey.com</a></span>
       <!--<p>What's your favorite food?</p>-->
-      <p class="flavor-text">Come back when you've found that soundrel, Brodigan!</p>
+      <p class="flavor-text">Come back when you've found that scoundrel, Brodigan!</p>
 		</div>
 		<div class="avatar-container">
 			{#key currentIndex}
