@@ -1,5 +1,8 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+
 	let { data } = $props();
+	let copiedId = $state<string | null>(null);
 
 	function formatDate(dateString: string): string {
 		const date = new Date(dateString);
@@ -17,6 +20,15 @@
 			minute: '2-digit',
 			hour12: true
 		});
+	}
+
+	async function copyLink(postId: string) {
+		const url = `${$page.url.origin}/timeline/${postId}`;
+		await navigator.clipboard.writeText(url);
+		copiedId = postId;
+		setTimeout(() => {
+			copiedId = null;
+		}, 2000);
 	}
 </script>
 
@@ -54,7 +66,29 @@
 					</div>
 					
 					<div class="post-content">
-						<h2 class="post-title">{post.title}</h2>
+						<div class="post-header-row">
+							<h2 class="post-title">
+								<a href="/timeline/{post.id}">{post.title}</a>
+							</h2>
+							<button 
+								class="share-button" 
+								onclick={() => copyLink(post.id)}
+								title={copiedId === post.id ? 'Copied!' : 'Copy link'}
+								aria-label="Copy link to clipboard"
+							>
+								{#if copiedId === post.id}
+									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<polyline points="20 6 9 17 4 12"></polyline>
+									</svg>
+								{:else}
+									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+										<polyline points="16 6 12 2 8 6"></polyline>
+										<line x1="12" y1="2" x2="12" y2="15"></line>
+									</svg>
+								{/if}
+							</button>
+						</div>
 						
 						{#if post.media.length > 0}
 							<div class="post-media" class:multiple={post.media.length > 1}>
@@ -184,12 +218,51 @@
 		border: 1px solid rgba(237, 234, 224, 0.12);
 	}
 
+	.post-header-row {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 0.75rem;
+		margin-bottom: 0.75rem;
+	}
+
 	.post-title {
 		font-family: "Rye", serif;
 		font-size: 1.15rem;
 		font-weight: 400;
-		margin-bottom: 0.75rem;
 		letter-spacing: 0.02em;
+		line-height: 1.3;
+	}
+
+	.post-title a {
+		color: inherit;
+		text-decoration: none;
+		transition: opacity 0.2s ease;
+	}
+
+	.post-title a:hover {
+		opacity: 0.8;
+	}
+
+	.share-button {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 30px;
+		height: 30px;
+		background: rgba(237, 234, 224, 0.08);
+		border: 1px solid rgba(237, 234, 224, 0.15);
+		border-radius: 0.4rem;
+		color: inherit;
+		cursor: pointer;
+		opacity: 0.5;
+		transition: all 0.2s ease;
+	}
+
+	.share-button:hover {
+		opacity: 1;
+		background: rgba(237, 234, 224, 0.12);
 	}
 
 	.post-media {
