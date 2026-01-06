@@ -33,7 +33,7 @@
 			Back to the library
 		</a>
 		<h1>The Timeline</h1>
-		<p class="subtitle">Dispatches from Kline household #5</p>
+		<p class="subtitle">Dispatches from Jon's timeline</p>
 	</header>
 
 	{#if data.error}
