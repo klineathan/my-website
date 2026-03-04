@@ -23,9 +23,9 @@ interface Post {
 }
 
 export async function load({ fetch, params }) {
-	const response = await fetch(`${env.CRM_URL}/api/v1/posts/${params.id}`, {
+	const response = await fetch(`${env.CMS_URL}/api/v1/posts/${params.id}`, {
 		headers: {
-			Authorization: `Bearer ${env.CRM_KEY}`,
+			Authorization: `Bearer ${env.CMS_KEY}`,
 			'Content-Type': 'application/json'
 		}
 	});

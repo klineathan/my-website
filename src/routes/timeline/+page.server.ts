@@ -1,4 +1,6 @@
 import { env } from '$env/dynamic/private';
+import { fail } from '@sveltejs/kit';
+import type { Actions } from './$types';
 
 interface MediaItem {
 	id: string;
@@ -30,10 +32,12 @@ interface PostsResponse {
 	};
 }
 
-export async function load({ fetch }) {
-	const response = await fetch(`${env.CRM_URL}/api/v1/posts`, {
+export async function load({ fetch, url }) {
+	const subscribed = url.searchParams.get('subscribed') === 'true';
+
+	const response = await fetch(`${env.CMS_URL}/api/v1/posts`, {
 		headers: {
-			Authorization: `Bearer ${env.CRM_KEY}`,
+			Authorization: `Bearer ${env.CMS_KEY}`,
 			'Content-Type': 'application/json'
 		}
 	});
@@ -41,7 +45,8 @@ export async function load({ fetch }) {
 	if (!response.ok) {
 		return {
 			posts: [],
-			error: 'Failed to fetch posts'
+			error: 'Failed to fetch posts',
+			subscribed
 		};
 	}
 
@@ -49,7 +54,38 @@ export async function load({ fetch }) {
 
 	return {
 		posts: result.data,
-		pagination: result.pagination
+		pagination: result.pagination,
+		subscribed
 	};
 }
+
+export const actions: Actions = {
+	subscribe: async ({ request, fetch }) => {
+		const formData = await request.formData();
+		const email = formData.get('email')?.toString();
+		const honeypot = formData.get('website')?.toString();
+		const timestamp = formData.get('timestamp')?.toString();
+
+		if (!email) {
+			return fail(400, { error: 'Please enter your email address.' });
+		}
+
+		try {
+			const response = await fetch(`${env.CMS_URL}/api/v1/subscribe`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ email, honeypot, timestamp })
+			});
+
+			if (!response.ok) {
+				const result = await response.json();
+				return fail(400, { error: result.message || 'Something went wrong.' });
+			}
+
+			return { success: true };
+		} catch {
+			return fail(500, { error: 'Something went wrong. Please try again.' });
+		}
+	}
+};
 
