@@ -11,6 +11,16 @@ interface MediaItem {
 	height: number | null;
 }
 
+interface Comment {
+	id: string;
+	postId: string;
+	parentId: string | null;
+	authorName: string;
+	content: string;
+	isOwner: boolean;
+	createdAt: string;
+}
+
 interface Post {
 	id: string;
 	title: string;
@@ -20,10 +30,11 @@ interface Post {
 	createdAt: string;
 	updatedAt: string;
 	media: MediaItem[];
+	comments?: Comment[];
 }
 
-export async function load({ fetch, params }) {
-	const response = await fetch(`${env.CMS_URL}/api/v1/posts/${params.id}`, {
+async function fetchPost(fetchFn: typeof fetch, id: string): Promise<Post> {
+	const response = await fetchFn(`${env.CMS_URL}/api/v1/posts/${id}`, {
 		headers: {
 			Authorization: `Bearer ${env.CMS_KEY}`,
 			'Content-Type': 'application/json'
@@ -38,11 +49,12 @@ export async function load({ fetch, params }) {
 	}
 
 	const result = await response.json();
-	// Handle both { data: Post } and Post response formats
-	const post: Post = result.data ?? result;
+	return result.data ?? result;
+}
 
+export function load({ fetch, params }) {
 	return {
-		post
+		postData: fetchPost(fetch, params.id)
 	};
 }
 

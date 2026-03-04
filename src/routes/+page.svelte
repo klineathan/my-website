@@ -1,9 +1,13 @@
 <script lang="ts">
-	const images = [
-		{ src: '/pic_1.JPEG', thought: 'Who knew there were medieval castle ruins in Missouri?' },
-		{ src: '/pic_2.JPEG', thought: "How did Peter convince me to do this?" },
-		{ src: '/pic_3.PNG', thought: "I'll have what I'm having" }
+	// Use CMS-driven profiles when available; fallback to empty (carousel hidden if empty)
+	const fallbackImages = [
+		{ src: '/pic_1.JPEG', thought: 'Who knew there were medieval castle ruins in Missouri?', alt: 'Jon Kline' },
+		{ src: '/pic_2.JPEG', thought: "How did Peter convince me to do this?", alt: 'Jon Kline' },
+		{ src: '/pic_3.PNG', thought: "I'll have what I'm having", alt: 'Jon Kline' }
 	];
+
+	let { data } = $props();
+	const images = $derived(data.profiles?.length ? data.profiles : fallbackImages);
 
 	let currentIndex = $state(0);
 
@@ -30,6 +34,7 @@
       <p class="flavor-text">Come back when you've found that scoundrel, Brodigan!</p>
 		</div>
 		<div class="avatar-container">
+			{#if images.length > 0}
 			{#key currentIndex}
 				<div class="thought-bubble">
 					<span class="thought-text">{images[currentIndex].thought}</span>
@@ -38,7 +43,7 @@
 			{#each images as image, i}
 				<img
 					src={image.src}
-					alt="Jon Kline"
+					alt={image.alt ?? 'Jon Kline'}
 					class="avatar"
 					class:active={i === currentIndex}
 				/>
@@ -55,6 +60,7 @@
 					</svg>
 				</button>
 			</div>
+			{/if}
 		</div>
 	</section>
 

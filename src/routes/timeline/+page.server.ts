@@ -12,6 +12,16 @@ interface MediaItem {
 	height: number | null;
 }
 
+interface Comment {
+	id: string;
+	postId: string;
+	parentId: string | null;
+	authorName: string;
+	content: string;
+	isOwner: boolean;
+	createdAt: string;
+}
+
 interface Post {
 	id: string;
 	title: string;
@@ -21,6 +31,7 @@ interface Post {
 	createdAt: string;
 	updatedAt: string;
 	media: MediaItem[];
+	comments?: Comment[];
 }
 
 interface PostsResponse {
@@ -32,10 +43,8 @@ interface PostsResponse {
 	};
 }
 
-export async function load({ fetch, url }) {
-	const subscribed = url.searchParams.get('subscribed') === 'true';
-
-	const response = await fetch(`${env.CMS_URL}/api/v1/posts`, {
+async function fetchPosts(fetchFn: typeof fetch): Promise<PostsResponse> {
+	const response = await fetchFn(`${env.CMS_URL}/api/v1/posts?page=1&limit=10`, {
 		headers: {
 			Authorization: `Bearer ${env.CMS_KEY}`,
 			'Content-Type': 'application/json'
@@ -44,17 +53,19 @@ export async function load({ fetch, url }) {
 
 	if (!response.ok) {
 		return {
-			posts: [],
-			error: 'Failed to fetch posts',
-			subscribed
+			data: [],
+			pagination: { page: 1, limit: 10, hasMore: false }
 		};
 	}
 
-	const result: PostsResponse = await response.json();
+	return response.json();
+}
+
+export function load({ fetch, url }) {
+	const subscribed = url.searchParams.get('subscribed') === 'true';
 
 	return {
-		posts: result.data,
-		pagination: result.pagination,
+		postsData: fetchPosts(fetch),
 		subscribed
 	};
 }
@@ -88,4 +99,3 @@ export const actions: Actions = {
 		}
 	}
 };
-
