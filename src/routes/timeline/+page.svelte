@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { enhance } from '$app/forms';
 
-	let { data } = $props();
+	let { data, form } = $props();
 	let copiedId = $state<string | null>(null);
+	let submitting = $state(false);
+	let formTimestamp = $state(Date.now().toString());
 
 	function formatDate(dateString: string): string {
 		const date = new Date(dateString);
@@ -46,6 +49,61 @@
 		</a>
 		<h1>The Timeline</h1>
 		<p class="subtitle">Dispatches from Jon's timeline</p>
+
+		{#if data.subscribed}
+			<div class="subscribe-success">
+				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<polyline points="20 6 9 17 4 12"></polyline>
+				</svg>
+				<span>You're subscribed! You'll receive monthly updates.</span>
+			</div>
+		{:else if form?.success}
+			<div class="subscribe-success">
+				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+					<polyline points="22,6 12,13 2,6"></polyline>
+				</svg>
+				<span>Check your email for a confirmation link.</span>
+			</div>
+		{:else}
+			<form
+				method="POST"
+				action="?/subscribe"
+				class="subscribe-form"
+				use:enhance={() => {
+					submitting = true;
+					return async ({ update }) => {
+						submitting = false;
+						await update();
+					};
+				}}
+			>
+				<div class="subscribe-input-row">
+					<input
+						type="email"
+						name="email"
+						placeholder="your@email.com"
+						required
+						autocomplete="email"
+						class="subscribe-input"
+						disabled={submitting}
+					/>
+					<button type="submit" class="subscribe-button" disabled={submitting}>
+						{#if submitting}
+							Sending...
+						{:else}
+							Subscribe
+						{/if}
+					</button>
+				</div>
+				<input type="text" name="website" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" tabindex="-1" autocomplete="off" />
+				<input type="hidden" name="timestamp" value={formTimestamp} />
+				{#if form?.error}
+					<p class="subscribe-error">{form.error}</p>
+				{/if}
+				<p class="subscribe-note">Get a monthly digest of new posts. No spam, unsubscribe anytime.</p>
+			</form>
+		{/if}
 	</header>
 
 	{#if data.error}
@@ -156,6 +214,86 @@
 		font-style: italic;
 		opacity: 0.75;
 		font-size: 1.05rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.subscribe-form {
+		position: relative;
+		max-width: 380px;
+		margin: 0 auto;
+	}
+
+	.subscribe-input-row {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.subscribe-input {
+		flex: 1;
+		padding: 0.6rem 0.9rem;
+		background: rgba(237, 234, 224, 0.1);
+		border: 1px solid rgba(237, 234, 224, 0.25);
+		border-radius: 0.4rem;
+		color: #EDEAE0;
+		font-family: "Spectral", serif;
+		font-size: 0.95rem;
+		outline: none;
+		transition: border-color 0.2s ease;
+	}
+
+	.subscribe-input::placeholder {
+		color: rgba(237, 234, 224, 0.45);
+	}
+
+	.subscribe-input:focus {
+		border-color: rgba(237, 234, 224, 0.5);
+	}
+
+	.subscribe-button {
+		padding: 0.6rem 1.2rem;
+		background: #EDEAE0;
+		color: #893F45;
+		border: none;
+		border-radius: 0.4rem;
+		font-family: "Spectral", serif;
+		font-size: 0.95rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition: opacity 0.2s ease;
+		white-space: nowrap;
+	}
+
+	.subscribe-button:hover {
+		opacity: 0.9;
+	}
+
+	.subscribe-button:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+
+	.subscribe-note {
+		font-size: 0.78rem;
+		opacity: 0.5;
+		margin-top: 0.5rem;
+	}
+
+	.subscribe-error {
+		font-size: 0.85rem;
+		color: #ffb4b4;
+		margin-top: 0.5rem;
+	}
+
+	.subscribe-success {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.65rem 1.1rem;
+		background: rgba(237, 234, 224, 0.1);
+		border: 1px solid rgba(237, 234, 224, 0.2);
+		border-radius: 0.5rem;
+		font-size: 0.92rem;
+		opacity: 0.9;
 	}
 
 	.timeline {
