@@ -18,6 +18,12 @@
 	function next() {
 		currentIndex = (currentIndex + 1) % images.length;
 	}
+
+	function getPreviewText(project: { description: string | null; content: string | null }): string {
+		if (project.description) return project.description;
+		if (!project.content) return '';
+		return project.content.replace(/<[^>]*>/g, '');
+	}
 </script>
 
 <main>
@@ -68,24 +74,28 @@
 		<h2><a href="/timeline">What have I been up to?</a></h2>
 		<p>See <a href="/timeline">my timeline</a> to get personal with Jon</p>
 
-		<!-- <h2>Artifacts of making and experimenting</h2>
-		<ul>
-			<li><a href="#">Dumpling, the JDM camper van</a></li>
-			<li><a href="#">Experiences of daily driving a Linux smartphone</a></li>
-			<li><a href="#">Declaring war against algorithmic content recommendation</a></li>
-		</ul>
-
-		<h2>Articles</h2>
-		<ul>
-			<li><a href="#">Rejecting hyper-convenience: The start of a character-driven path through consumer technology</a></li>
-		</ul>
-
-		<h2>Other fun stuff</h2>
-		<ul>
-			<li><a href="#">A list of my favorite things in life</a></li>
-			<li><a href="#">People, organizations, and places that inspire me</a></li>
-			<li><a href="#">Gift ideas for mom</a></li>
-		</ul> -->
 	</section>
+
+	{#if data.projects?.length}
+	<section>
+		<h2>Creations</h2>
+		<p class="section-subtitle">Making is very important to me. Here's a record of my recently completed or ongoing projects.</p>
+		<div class="projects-list">
+			{#each data.projects as project}
+				<a href="/my-projects/{project.id}" class="project-item">
+					<img
+						src={project.imageUrl}
+						alt={project.altText}
+						class="project-thumbnail"
+					/>
+					<div class="project-info">
+						<span class="project-title">{project.title}</span>
+						<p class="project-description">{getPreviewText(project)}</p>
+					</div>
+				</a>
+			{/each}
+		</div>
+	</section>
+	{/if}
 </main>
 
